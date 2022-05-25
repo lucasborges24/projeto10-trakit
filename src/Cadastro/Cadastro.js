@@ -1,13 +1,18 @@
-import styled from "styled-components";
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import styled from 'styled-components'
+import { Link } from 'react-router-dom'
+import { useState } from 'react'
 
 import logo from "../assets/images/logo.svg"
 
-function Login() {
+function Cadastro() {
 
-    const [loginData, setLoginData] = useState({ email: '', senha: '' });
-    console.log(loginData)
+    const [cadastroData, setCadastroData] = useState({
+        email: '',
+        senha: '',
+        nome: '',
+        foto: ''
+    })
+
     function inputs() {
         return (
             <>
@@ -15,21 +20,35 @@ function Login() {
                     type="email"
                     placeholder="email"
                     required
-                    value={loginData.email}
-                    onChange={e => setLoginData({ ...loginData, email: e.target.value })}
+                    value={cadastroData.email}
+                    onChange={e => setCadastroData({ ...cadastroData, email: e.target.value })}
                 />
                 <input
                     type="password"
                     placeholder="senha"
                     required
-                    value={loginData.senha}
-                    onChange={e => setLoginData({ ...loginData, senha: e.target.value })}
+                    value={cadastroData.senha}
+                    onChange={e => setCadastroData({ ...cadastroData, senha: e.target.value })}
+                />
+                <input
+                    type="text"
+                    placeholder="nome"
+                    required
+                    value={cadastroData.nome}
+                    onChange={e => setCadastroData({ ...cadastroData, nome: e.target.value })}
+                />
+                <input
+                    type="url"
+                    placeholder="foto"
+                    required
+                    value={cadastroData.foto}
+                    onChange={e => setCadastroData({ ...cadastroData, foto: e.target.value })}
                 />
                 <button>
-                    Entrar
+                    Cadastrar
                 </button>
-                <LinkLogin to="/cadastro">
-                    <h3>Não tem uma conta? Cadastre-se!</h3>
+                <LinkLogin to="/">
+                    <h3>Já tem uma conta? Faça login!</h3>
                 </LinkLogin>
             </>
         )
@@ -108,5 +127,4 @@ const LinkLogin = styled(Link)`
     }
 `
 
-
-export default Login;
+export default Cadastro

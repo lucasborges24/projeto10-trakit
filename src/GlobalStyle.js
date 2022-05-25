@@ -5,7 +5,10 @@ const GlobalStyle = createGlobalStyle`
 ${reset}
 * {
     box-sizing: border-box;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Lexend Deca', sans-serif;
+    --placeholder-color: #DBDBDB;
+    --input-color: #666666;
+    --color-blue: #52B6FF;
 }
 `;
 
