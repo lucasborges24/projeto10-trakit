@@ -1,13 +1,19 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import axios from "axios";
 
 import logo from "../assets/images/logo.svg"
+import Loader from "../shared/Loader";
 
 function Login() {
 
+    const navigate = useNavigate();
+
     const [loginData, setLoginData] = useState({ email: '', senha: '' });
-    console.log(loginData)
+    const [enabledButton, setEnabledButton] = useState(true)
+    const [token, setToken] = useState('');
+
     function inputs() {
         return (
             <>
@@ -26,7 +32,14 @@ function Login() {
                     onChange={e => setLoginData({ ...loginData, senha: e.target.value })}
                 />
                 <button>
-                    Entrar
+                    {
+                        enabledButton ?
+                            "Entrar"
+                            :
+                            <>
+                                <p>Carregando...</p>
+                            </>
+                    }
                 </button>
                 <LinkLogin to="/cadastro">
                     <h3>Não tem uma conta? Cadastre-se!</h3>
@@ -35,12 +48,35 @@ function Login() {
         )
     }
 
+    function signup(event) {
+        event.preventDefault();
+        if (!enabledButton) {
+
+        } else {
+            setEnabledButton(false)
+            const response = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login", {
+                email: loginData.email,
+                password: loginData.senha
+            });
+
+            response
+                .then(({ data }) => {
+                    setToken(data.token);
+                    navigate("/hoje")
+                })
+                .catch(err => {
+                    alert("Ocorreu o erro: " + err.response.statusText + ". Por favor, tente novamente.");
+                    setEnabledButton(true)
+                })
+        }
+    }
+
     const forms = inputs()
 
     return (
         <>
             <Img src={logo} alt="logo" />
-            <Form>{forms}</Form>
+            <Form onSubmit={signup}>{forms}</Form>
         </>
     )
 }
@@ -89,6 +125,7 @@ const Form = styled.form`
         background: var(--color-blue);
         color: #FFFFFF;
         font-size: 1.4em;
+        cursor: pointer;
     }
 
 

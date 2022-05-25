@@ -1,10 +1,13 @@
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate} from 'react-router-dom'
 import { useState } from 'react'
+import axios from 'axios'
 
 import logo from "../assets/images/logo.svg"
 
 function Cadastro() {
+
+    const navigate = useNavigate();
 
     const [cadastroData, setCadastroData] = useState({
         email: '',
@@ -12,6 +15,7 @@ function Cadastro() {
         nome: '',
         foto: ''
     })
+    const [enabledButton, setEnabledButton] = useState(true)
 
     function inputs() {
         return (
@@ -54,15 +58,40 @@ function Cadastro() {
         )
     }
 
+    function signup(event) {
+        event.preventDefault();
+        if (!enabledButton) {
+            
+        } else {
+            setEnabledButton(false)
+            const response = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up", {
+                email: cadastroData.email,
+                name: cadastroData.nome,
+                image: cadastroData.foto,
+                password: cadastroData.senha
+            });
+    
+            response
+                .then(() => navigate("/"))
+                .catch(err => {
+                    alert("Ocorreu o erro: " + err.response.statusText + ". Por favor, tente novamente.");
+                    setEnabledButton(true)
+                })
+        }
+    }
+
+
     const forms = inputs()
 
     return (
         <>
             <Img src={logo} alt="logo" />
-            <Form>{forms}</Form>
+            <Form onSubmit={signup}>{forms}</Form>
         </>
     )
 }
+
+
 
 const Img = styled.img`
     display: flex;
@@ -108,6 +137,7 @@ const Form = styled.form`
         background: var(--color-blue);
         color: #FFFFFF;
         font-size: 1.4em;
+        cursor: pointer;
     }
 
 
