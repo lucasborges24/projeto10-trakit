@@ -7,13 +7,14 @@ import Login from "./Login/Login";
 import Cadastro from "./Cadastro/Cadastro";
 import Hoje from "./hoje/Hoje";
 
+
 function App() {
 
-  const [token, setToken] = useState();
+  const [userInfo, setUserInfo] = useState([]);
 
 
   return (
-    <UserContext.Provider value={{ token, setToken }}>
+    <UserContext.Provider value={{userInfo, setUserInfo }}>
       <BrowserRouter>
         <GlobalStyle />
         <Routes>

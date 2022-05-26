@@ -9,7 +9,7 @@ import Loader from "../shared/Loader";
 
 function Login() {
 
-    const { setToken } = useContext(UserContext);
+    const { setUserInfo } = useContext(UserContext);
     const navigate = useNavigate();
 
     const [estaSalvo, setEstaSalvo] = useState(false)
@@ -32,7 +32,7 @@ function Login() {
 
         response
             .then(({ data }) => {
-                setToken(data.token);
+                setUserInfo(data)
                 navigate("/hoje")
             })
             .catch(() => {
@@ -88,7 +88,7 @@ function Login() {
 
             response
                 .then(({ data }) => {
-                    setToken(data.token);
+                    setUserInfo(data);
                     localStorage.setItem("dados", JSON.stringify(loginData))
                     navigate("/hoje")
                 })
@@ -113,7 +113,7 @@ function Login() {
                     <Loader />
 
                     :
-                    
+
                     <>
                         <Img src={logo} alt="logo" />
                         <Form onSubmit={signup}>{forms}</Form>
