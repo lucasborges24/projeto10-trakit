@@ -1,18 +1,47 @@
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import axios from "axios";
 
 import logo from "../assets/images/logo.svg"
+import UserContext from "../contexts/UserContext";
 import Loader from "../shared/Loader";
 
 function Login() {
 
+    const { setToken, estaSalvo, setEstaSalvo } = useContext(UserContext);
     const navigate = useNavigate();
 
     const [loginData, setLoginData] = useState({ email: '', senha: '' });
     const [enabledButton, setEnabledButton] = useState(true)
-    const [token, setToken] = useState('');
+
+    if ((JSON.parse(localStorage.getItem("dados")) !== null)) {
+        if (estaSalvo === false) {
+            setEstaSalvo(true);
+        }
+        console.log(estaSalvo)
+        atualizaHojeScreen();
+    }
+
+    function atualizaHojeScreen() {
+        const dadosSalvos = JSON.parse(localStorage.getItem("dados"))
+        const response = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login", {
+            email: dadosSalvos.email,
+            password: dadosSalvos.senha
+        });
+
+        response
+            .then(({ data }) => {
+                setToken(data.token);
+                navigate("/hoje")
+            })
+            .catch(() => {
+                localStorage.removeItem("dados")
+                setEnabledButton(true)
+                setEstaSalvo(false);
+            })
+    }
+
 
     function inputs() {
         return (
@@ -36,9 +65,7 @@ function Login() {
                         enabledButton ?
                             "Entrar"
                             :
-                            <>
-                                <p>Carregando...</p>
-                            </>
+                            <p>Carregando...</p>
                     }
                 </button>
                 <LinkLogin to="/cadastro">
@@ -62,6 +89,7 @@ function Login() {
             response
                 .then(({ data }) => {
                     setToken(data.token);
+                    localStorage.setItem("dados", JSON.stringify(loginData))
                     navigate("/hoje")
                 })
                 .catch(err => {
@@ -71,12 +99,21 @@ function Login() {
         }
     }
 
+
     const forms = inputs()
+
 
     return (
         <>
-            <Img src={logo} alt="logo" />
-            <Form onSubmit={signup}>{forms}</Form>
+            {
+                estaSalvo ?
+                    <Loader />
+                    :
+                    <>
+                        <Img src={logo} alt="logo" />
+                        <Form onSubmit={signup}>{forms}</Form>
+                    </>
+            }
         </>
     )
 }
