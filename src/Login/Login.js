@@ -9,9 +9,10 @@ import Loader from "../shared/Loader";
 
 function Login() {
 
-    const { setToken, estaSalvo, setEstaSalvo } = useContext(UserContext);
+    const { setToken } = useContext(UserContext);
     const navigate = useNavigate();
 
+    const [estaSalvo, setEstaSalvo] = useState(false)
     const [loginData, setLoginData] = useState({ email: '', senha: '' });
     const [enabledButton, setEnabledButton] = useState(true)
 
@@ -19,7 +20,6 @@ function Login() {
         if (estaSalvo === false) {
             setEstaSalvo(true);
         }
-        console.log(estaSalvo)
         atualizaHojeScreen();
     }
 
@@ -106,9 +106,14 @@ function Login() {
     return (
         <>
             {
-                estaSalvo ?
+                estaSalvo
+
+                    ?
+
                     <Loader />
+
                     :
+                    
                     <>
                         <Img src={logo} alt="logo" />
                         <Form onSubmit={signup}>{forms}</Form>
@@ -181,6 +186,5 @@ const LinkLogin = styled(Link)`
         color: #52B6FF;
     }
 `
-
 
 export default Login;

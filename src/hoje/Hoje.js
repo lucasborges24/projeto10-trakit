@@ -1,12 +1,18 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
+import axios from "axios";
 
 import UserContext from "../contexts/UserContext";
-import Loader from "../shared/Loader";
 
 function Hoje() {
 
     const {token} = useContext(UserContext)
-    console.log(token)
+    const config = {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    }
+
+   
 
     return (
 
