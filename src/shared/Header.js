@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { useContext } from 'react'
+import { Link } from 'react-router-dom'
 
 import trackit from '../assets/images/TrackIt.svg'
 import UserContext from '../contexts/UserContext'
@@ -8,11 +9,13 @@ function Header() {
 
     const { userInfo } = useContext(UserContext);
     const { image } = userInfo;
-    
+
 
     return (
         <Head>
-            <ImgLogo src={trackit} alt="logo image" />
+            <Link to="/hoje">
+                <ImgLogo src={trackit} alt="logo image" />
+            </Link>
             <ImgUser src={image} alt="user image" />
         </Head>
     )
