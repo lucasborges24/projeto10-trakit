@@ -13,10 +13,11 @@ import Historico from "./Historico/Historico";
 function App() {
 
   const [userInfo, setUserInfo] = useState([]);
-
+  const [habits, setHabits] = useState([]);
+  
 
   return (
-    <UserContext.Provider value={{userInfo, setUserInfo }}>
+    <UserContext.Provider value={{userInfo, setUserInfo, habits, setHabits }}>
       <BrowserRouter>
         <GlobalStyle />
         <Routes>

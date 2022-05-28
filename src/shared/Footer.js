@@ -18,7 +18,7 @@ function Footer() {
             <Circular>
                 <Link to="/hoje">
                     <CircularProgressbar value={por}
-                        text={`${por}%`}
+                        text={`Hoje`}
                         background
                         backgroundPadding={6}
                         styles={buildStyles({

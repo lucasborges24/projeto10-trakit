@@ -32,6 +32,7 @@ function Historico() {
 const MainHistorico = styled.main`
     width: 100vw;
     height: 100vh;
+    margin-top: 70px;
     background-color: #E5E5E5;
 `
 
