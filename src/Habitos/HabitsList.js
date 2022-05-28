@@ -1,16 +1,26 @@
 import { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components'
+import { confirmAlert } from 'react-confirm-alert';
 
 import UserContext from '../contexts/UserContext';
 import Loader from '../shared/Loader';
+import trash from '../assets/images/trash.svg'
+import Dialog from './Dialog';
 
 function HabitsList(props) {
 
-    const { dayss } = props
+    const { dayss, dialog, setDialog } = props
     const [dayHabits, setDaysHabits] = useState(dayss)
     const { habits } = useContext(UserContext)
 
     if (habits.length === null) return <Loader />
+
+    function DeletHabit () {
+        setDialog({
+            message: "Você quer mesmo cancelar o hábito?",
+            isLoading: true
+        })
+    }
     
 
 
@@ -20,6 +30,7 @@ function HabitsList(props) {
                 habits.map((i, key) =>
                     <HabitList>
                         <h2>{i.name}</h2>
+                        <ion-icon onClick={DeletHabit} name="trash-outline"></ion-icon>
                         <HabitDays>
                             {
                                 dayss.map((j, keyy) =>
@@ -33,6 +44,7 @@ function HabitsList(props) {
                     </HabitList>
                 )
             }
+            
         </>
 
     )
@@ -54,7 +66,8 @@ function background(keyy, habits) {
 
 const HabitList = styled.div` 
     /* width: 20em; */
-    height: 91px;
+    min-height: 91px;
+    height: 100%;
     background: #FFFFFF;
     border-radius: 5px;
     margin: 20px 15px;
@@ -67,6 +80,12 @@ const HabitList = styled.div`
         color: #666666;
         padding-top: 15px;
         margin-left: 15px;
+    }
+
+    ion-icon {
+        position: absolute;
+        top: 10px; right: 10px;
+        font-size: 17px;
     }
 `
 

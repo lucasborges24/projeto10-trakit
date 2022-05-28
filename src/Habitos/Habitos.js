@@ -7,6 +7,7 @@ import Header from "../shared/Header"
 import Footer from "../shared/Footer"
 import axios from 'axios';
 import HabitsList from './HabitsList';
+import Dialog from './Dialog';
 
 function Habitos() {
 
@@ -14,13 +15,18 @@ function Habitos() {
     const { userInfo, habits, setHabits } = useContext(UserContext)
     const { token } = userInfo;
     const [enableButton, setEnableButton] = useState(true)
+    const [buttonSend, setButtonSend] = useState(true);
     const [habitData, setHabitData] = useState({
         name: '',
         days: []
     });
     const [daySelected, setDaySelected] = useState(false);
+    const [dialogg, setDialogg] = useState({
+        message: '',
+        isLoading: false
+    })
 
-    console.log(habitData)
+
     useEffect(() => {
         if (userInfo.length === 0) {
             navigate("/");
@@ -77,26 +83,58 @@ function Habitos() {
         selected: false
     },
     ])
+    console.log(buttonSend)
+
+    function sendHabit() {
+        if (buttonSend) {
+            if (habitData.name.length === 0) {
+                return alert("Por favor, coloque o nome do hábito.")
+    
+            }
+            if (habitData.days.length === 0) {
+                return alert("Por favor, selecione ao menos um dia para praticar o hábito.")
+            }
+            
+            const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits"
+            const requisition = axios.post(URL, habitData, config);
+    
+            requisition.then(() => {
+                console.log("passando pra avisar que o gabriel é um ótimo tutor")
+                navigate("/hoje")
+            }).catch(() => alert("houve um erro. tente novamente."))
+        }
+        setButtonSend(false);
+    }
+
+    
 
 
     function toggleDay(selected, id) {
+        console.log(buttonSend)
+        if (!buttonSend) {
+            return;
+        }
         days.map((i, keyy) => {
             const a = [...days]
             if (keyy === id) {
                 if (selected) {
                     a[id] = { day: days[id].day, selected: false }
+                    const aux2 = { ...habitData, days: [...habitData.days].filter(item => item !== id) }
+                    console.log(aux2)
+                    setHabitData(aux2)
                     return setDays(a)
                 } else if (!selected) {
-                    console.log(a[id])
                     a[id] = { day: days[id].day, selected: true }
-                    console.log(a)
+                    const aux = { ...habitData, days: [...habitData.days, id].sort((l, m) => l - m) }
+                    console.log(aux)
+                    setHabitData(aux)
                     return setDays(a)
                 }
             }
         })
 
     }
-    console.log(days)
+
 
     function CreateNewHabit() {
         return (
@@ -109,10 +147,29 @@ function Habitos() {
                             onClick={() => toggleDay(i.selected, key)}><p>{i.day}</p>
                         </Day>)}
                 </Days>
-                <SaveHabit>Salvar</SaveHabit>
+                <SaveHabit onClick={() => {
+                    sendHabit();
+                }}>
+                    Salvar
+                </SaveHabit>
                 <h4 onClick={() => setEnableButton(true)}>Cancelar</h4>
             </NewHabit>
         )
+    }
+
+    function areYouSureDelete(choose) {
+        if (choose) {
+            alert("voce escolheu")
+            setDialogg({
+                message: '',
+                isLoading: false
+            })
+        } else {
+            setDialogg({
+                message: '',
+                isLoading: false
+            })
+        }
     }
 
     const newhabit = CreateNewHabit();
@@ -120,6 +177,7 @@ function Habitos() {
     return (
         <>
             <Header />
+            
             <MainHabitos>
                 <HabitTitle>
                     <h1>Meus hábitos</h1>
@@ -128,15 +186,18 @@ function Habitos() {
                     </ButtonHabit>
                 </HabitTitle>
                 {enableButton ? <></> : newhabit}
-                {habits.length === null ?
+                {habits.length === 0 ?
                     <NonHabits>
                         <p>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</p>
                     </NonHabits>
                     :
-                    <HabitsList dayss={days} />
+                    <HabitsList dayss={days} dialog={dialogg} setDialog={setDialogg} />
                 }
             </MainHabitos>
+            { dialogg.isLoading && <Dialog message={dialogg.message} onDialog={areYouSureDelete}/>}
+            
             <Footer />
+            
         </>
     )
 }
@@ -155,8 +216,9 @@ function background(daySelected) {
 
 
 const MainHabitos = styled.main`
-    width: auto;
-    height: auto;
+    width: 100%;
+    min-height: 100vh;
+    height: 100%;
     margin-top: 70px;
     padding-bottom: 110px;
     padding-top: 30px;
@@ -232,6 +294,9 @@ const HabitName = styled.input`
     border-radius: 5px;
     margin: 18px 18px 10px 18px;
     padding-left: 10px;
+    font-size: 1em;
+    line-height: 22px;
+    color: var(--input-color);
 
     ::placeholder {
         font-family: 'Lexend Deca';
