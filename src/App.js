@@ -8,16 +8,18 @@ import Cadastro from "./Cadastro/Cadastro";
 import Hoje from "./hoje/Hoje";
 import Habitos from "./Habitos/Habitos";
 import Historico from "./Historico/Historico";
+// import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 
 function App() {
 
   const [userInfo, setUserInfo] = useState([]);
   const [habits, setHabits] = useState([]);
-  
+  const [todayHabitData, setTodayHabitData] = useState([]);
+  const [percent, setPercent] = useState(0)
 
   return (
-    <UserContext.Provider value={{userInfo, setUserInfo, habits, setHabits }}>
+    <UserContext.Provider value={{userInfo, setUserInfo, habits, setHabits, todayHabitData, setTodayHabitData, percent, setPercent }}>
       <BrowserRouter>
         <GlobalStyle />
         <Routes>
@@ -26,7 +28,6 @@ function App() {
           <Route path="/hoje" element={<Hoje />} />
           <Route path="/habitos" element={<Habitos />} />
           <Route path="/historico" element={<Historico />} />
-
         </Routes>
       </BrowserRouter>
     </UserContext.Provider>

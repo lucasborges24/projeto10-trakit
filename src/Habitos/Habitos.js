@@ -8,11 +8,12 @@ import Footer from "../shared/Footer"
 import axios from 'axios';
 import HabitsList from './HabitsList';
 import Dialog from './Dialog';
+import Loader from '../shared/Loader';
 
 function Habitos() {
 
     const navigate = useNavigate();
-    const { userInfo, habits, setHabits } = useContext(UserContext)
+    const { userInfo, habits, setHabits, percent } = useContext(UserContext)
     const { token } = userInfo;
     const [enableButton, setEnableButton] = useState(true)
     const [buttonSend, setButtonSend] = useState(true);
@@ -23,8 +24,11 @@ function Habitos() {
     const [daySelected, setDaySelected] = useState(false);
     const [dialogg, setDialogg] = useState({
         message: '',
-        isLoading: false
+        isLoading: false,
+        id: undefined
     })
+    const [deleting, setDeleting] = useState(false)
+    const [change, setChange] = useState()
 
 
     useEffect(() => {
@@ -40,14 +44,16 @@ function Habitos() {
     }
 
     useEffect(() => {
+        setDeleting(true)
         const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits"
         const response = axios.get(URL, config)
 
         response.then(({ data }) => {
+            setDeleting(false)
             const dados = data;
             setHabits(dados);
         })
-    }, [])
+    }, [change])
 
 
 
@@ -83,22 +89,22 @@ function Habitos() {
         selected: false
     },
     ])
-    console.log(buttonSend)
+    
 
     function sendHabit() {
         if (buttonSend) {
             if (habitData.name.length === 0) {
                 return alert("Por favor, coloque o nome do hábito.")
-    
+
             }
             if (habitData.days.length === 0) {
                 return alert("Por favor, selecione ao menos um dia para praticar o hábito.")
             }
-            
+
             const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits"
             const requisition = axios.post(URL, habitData, config);
-    
-            requisition.then(() => {
+
+            requisition.then((data) => {
                 console.log("passando pra avisar que o gabriel é um ótimo tutor")
                 navigate("/hoje")
             }).catch(() => alert("houve um erro. tente novamente."))
@@ -106,7 +112,7 @@ function Habitos() {
         setButtonSend(false);
     }
 
-    
+
 
 
     function toggleDay(selected, id) {
@@ -159,16 +165,31 @@ function Habitos() {
 
     function areYouSureDelete(choose) {
         if (choose) {
-            alert("voce escolheu")
+            deletar(dialogg.id)
             setDialogg({
                 message: '',
-                isLoading: false
+                isLoading: false,
+                id: undefined
             })
         } else {
             setDialogg({
                 message: '',
-                isLoading: false
+                isLoading: false,
+                id: undefined
             })
+        }
+    }
+
+    function deletar(id) {
+        if (id !== undefined) {
+            setDeleting(true)
+            const URL = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}`
+            const requisition = axios.delete(URL, config);
+
+            requisition.then(() => {
+                setChange(id)
+            }).catch(() => alert("aconteceu algo"))
+
         }
     }
 
@@ -177,27 +198,29 @@ function Habitos() {
     return (
         <>
             <Header />
-            
-            <MainHabitos>
-                <HabitTitle>
-                    <h1>Meus hábitos</h1>
-                    <ButtonHabit onClick={() => setEnableButton(false)}>
-                        <p>+</p>
-                    </ButtonHabit>
-                </HabitTitle>
-                {enableButton ? <></> : newhabit}
-                {habits.length === 0 ?
-                    <NonHabits>
-                        <p>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</p>
-                    </NonHabits>
-                    :
-                    <HabitsList dayss={days} dialog={dialogg} setDialog={setDialogg} />
-                }
-            </MainHabitos>
-            { dialogg.isLoading && <Dialog message={dialogg.message} onDialog={areYouSureDelete}/>}
-            
-            <Footer />
-            
+            {deleting ? <Loader /> :
+                <MainHabitos>
+                    <HabitTitle>
+                        <h1>Meus hábitos</h1>
+                        <ButtonHabit onClick={() => setEnableButton(false)}>
+                            <p>+</p>
+                        </ButtonHabit>
+                    </HabitTitle>
+                    {enableButton ? <></> : newhabit}
+                    {habits.length === 0 ?
+                        <NonHabits>
+                            <p>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</p>
+                        </NonHabits>
+                        :
+                        <HabitsList dayss={days} dialog={dialogg} setDialog={setDialogg} />
+                    }
+                </MainHabitos>
+            }
+            {dialogg.isLoading && <Dialog message={dialogg.message} onDialog={areYouSureDelete} />}
+            <Footer percent={percent}/>
+
+
+
         </>
     )
 }
@@ -282,12 +305,14 @@ const NewHabit = styled.div`
         color: #52B6FF;
         position: absolute;
         bottom: 22px; right: 120px;
+        cursor: pointer
     }
 
 `
 
 const HabitName = styled.input` 
-    width: 303px;
+    /* max-width: 265px; */
+    width: 90%;
     height: 45px;
     background: #FFFFFF;
     border: 1px solid #D5D5D5;
@@ -353,6 +378,7 @@ const SaveHabit = styled.div`
     font-size: 16px;
     text-align: center;
     color: #FFFFFF;
+    cursor: pointer;
 `
 
 export default Habitos

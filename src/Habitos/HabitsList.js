@@ -15,14 +15,15 @@ function HabitsList(props) {
 
     if (habits.length === null) return <Loader />
 
-    function DeletHabit () {
+    function DeletHabit (id) {   
         setDialog({
             message: "Você quer mesmo cancelar o hábito?",
-            isLoading: true
+            isLoading: true,
+            id: id
         })
     }
     
-
+    console.log(habits)
 
     return (
         <>
@@ -30,7 +31,7 @@ function HabitsList(props) {
                 habits.map((i, key) =>
                     <HabitList>
                         <h2>{i.name}</h2>
-                        <ion-icon onClick={DeletHabit} name="trash-outline"></ion-icon>
+                        <ion-icon onClick={() => DeletHabit(i.id)} name="trash-outline"></ion-icon>
                         <HabitDays>
                             {
                                 dayss.map((j, keyy) =>
@@ -66,7 +67,7 @@ function background(keyy, habits) {
 
 const HabitList = styled.div` 
     /* width: 20em; */
-    min-height: 91px;
+    /* min-height: 91px; */
     height: 100%;
     background: #FFFFFF;
     border-radius: 5px;
@@ -80,12 +81,15 @@ const HabitList = styled.div`
         color: #666666;
         padding-top: 15px;
         margin-left: 15px;
+        word-wrap: break-word;
+        width: 85%;
     }
 
     ion-icon {
         position: absolute;
         top: 10px; right: 10px;
         font-size: 17px;
+        cursor: pointer;
     }
 `
 
@@ -93,6 +97,7 @@ const HabitDays = styled.div`
     margin-left: 15px;
     display: flex;
     margin-top: 10px;
+    padding-bottom: 15px;
 
 `
 

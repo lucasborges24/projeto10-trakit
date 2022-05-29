@@ -3,8 +3,8 @@ import 'react-circular-progressbar/dist/styles.css'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 
-function Footer() {
-    const por = 60;
+function Footer({percent}) {
+    const por = percent;
     return (
         <>
             <FooterDiv>
