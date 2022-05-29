@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 
 function Footer({percent}) {
-    const por = percent;
+    const por = Math.round(percent);
     return (
         <>
             <FooterDiv>

@@ -93,6 +93,7 @@ function Habitos() {
 
     function sendHabit() {
         if (buttonSend) {
+            setDeleting(true);
             if (habitData.name.length === 0) {
                 return alert("Por favor, coloque o nome do hábito.")
 
@@ -198,7 +199,7 @@ function Habitos() {
     return (
         <>
             <Header />
-            {deleting ? <Loader /> :
+            {deleting ? <Loader text="Um segundo..."/> :
                 <MainHabitos>
                     <HabitTitle>
                         <h1>Meus hábitos</h1>

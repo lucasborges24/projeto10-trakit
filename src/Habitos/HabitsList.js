@@ -13,11 +13,11 @@ function HabitsList(props) {
     const [dayHabits, setDaysHabits] = useState(dayss)
     const { habits } = useContext(UserContext)
 
-    if (habits.length === null) return <Loader />
+    if (habits.length === null) return <Loader text="Um segundo..."/>
 
     function DeletHabit (id) {   
         setDialog({
-            message: "Você quer mesmo cancelar o hábito?",
+            message: "Você quer mesmo excluir o hábito?",
             isLoading: true,
             id: id
         })

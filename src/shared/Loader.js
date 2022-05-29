@@ -1,8 +1,11 @@
 import styled from 'styled-components'
 
-function Loader() {
+function Loader({text}) {
     return (
-        <Spinner>
+        <>
+        
+          <Spinner>
+            <h1>{text}</h1>
             <div className="loader">
                 <div className="loader-square"></div>
                 <div className="loader-square"></div>
@@ -13,17 +16,30 @@ function Loader() {
                 <div className="loader-square"></div>
             </div>
         </Spinner>
+        
+        </>
+      
     )
 }
 
 const Spinner = styled.div`
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100vw;
     height: 100vh;
  
+h1 {
+    font-family: 'Lexend Deca';
+    font-style: normal;
+    font-weight: 700;
+    margin-bottom: 50px;
+    font-size: 17.976px;
+    line-height: 22px;
 
+    color: #666666;
+}
 
  .loader {
          position: relative;

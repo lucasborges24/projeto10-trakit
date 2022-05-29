@@ -8,7 +8,6 @@ import Cadastro from "./Cadastro/Cadastro";
 import Hoje from "./hoje/Hoje";
 import Habitos from "./Habitos/Habitos";
 import Historico from "./Historico/Historico";
-// import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 
 function App() {

@@ -15,11 +15,12 @@ function Hoje() {
 
 
     const navigate = useNavigate();
-    const { userInfo, todayHabitData, setTodayHabitData, percent, setPercent } = useContext(UserContext)
+    const { userInfo, todayHabitData, setTodayHabitData, percent, setPercent, habits } = useContext(UserContext)
     const [changeHabit, setChangeHabit] = useState();
     const [iconButton, setIconButton] = useState(true);
+    const [fazerOLoadFunfar, setFazerOLoadFunfar] = useState(0)
 
-
+    console.log(habits)
     useEffect(() => {
         if (userInfo.length === 0) {
             navigate("/");
@@ -34,18 +35,27 @@ function Hoje() {
     }
     const now = dayjs().locale('pt-br');
 
+    
+
     useEffect(() => {
         const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today";
         const response = axios.get(URL, config);
         response.then(({ data }) => {
             setTodayHabitData(data)
-            const aux = data.filter((item) => item.done === true)
-            console.log(aux.length)
-            setPercent((aux.length / data.length) * 100)
+            setFazerOLoadFunfar(1);
+            if (todayHabitData.length === 0) {
+                setPercent(0)
+            } else {
+                const aux = data.filter((item) => item.done === true)
+                console.log(aux.length)
+                setPercent((aux.length / data.length) * 100)
+            }
         }).catch("algo aconteceu")
     }, [changeHabit])
 
-    console.log(todayHabitData)
+    if (todayHabitData.length === 0) {
+        setPercent(0)
+    }
 
     function toggleHabit(id, done) {
         console.log("passei aq")
@@ -130,8 +140,21 @@ function Hoje() {
         )
     }
 
+    function loadingao() {
+        if (fazerOLoadFunfar === 0) {
+            return (
+                loaderBall
+            )
+        } else {
+            return (
+                todayHabit
+            )
+        }
+    }
+
     const todayHabit = createTodayHabit()
     const loaderBall = createLoaderBall()
+    const loading = loadingao()
 
     return (
         <>
@@ -139,10 +162,10 @@ function Hoje() {
             <MainHoje>
                 <h1>{now.format("dddd, DD/MM").replace(/^\w/, (c) => c.toUpperCase())}</h1>
                 <Subtitle textcolor={percent}>
-                    {percent === 0 ? <>Nenhum hábito concluído ainda</> : <>{percent}% dos hábitos concluídos</>}
+                    {percent === 0 ? <>Nenhum hábito concluído ainda</> : <>{Math.round(percent)}% dos hábitos concluídos</>}
                 </Subtitle>
                 <TodayHabits>
-                    {todayHabitData.length === 0 ? loaderBall : todayHabit}
+                    {loading}
                 </TodayHabits>
             </MainHoje>
             <Footer percent={percent} />
@@ -172,7 +195,7 @@ function backgroundRecord(done, plus) {
 }
 
 const LoaderBall = styled.div`
-        margin: 20px;
+        margin-top: 40px;
         position: absolute;
         top: 50%;
         left: 50%;

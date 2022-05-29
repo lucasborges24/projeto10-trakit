@@ -110,7 +110,7 @@ function Login() {
 
                     ?
 
-                    <Loader />
+                    <Loader text="Um Segundo"/>
 
                     :
 
