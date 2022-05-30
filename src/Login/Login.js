@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useContext } from "react";
 import axios from "axios";
+import { ThreeDots } from "react-loader-spinner";
 
 import logo from "../assets/images/logo.svg"
 import UserContext from "../contexts/UserContext";
@@ -65,7 +66,7 @@ function Login() {
                         enabledButton ?
                             "Entrar"
                             :
-                            <p>Carregando...</p>
+                            <ThreeDots color="#fff" height={80} width={80} />
                     }
                 </button>
                 <LinkLogin to="/cadastro">
@@ -99,9 +100,7 @@ function Login() {
         }
     }
 
-
     const forms = inputs()
-
 
     return (
         <>

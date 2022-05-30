@@ -9,23 +9,22 @@ import { BallTriangle, Grid } from 'react-loader-spinner'
 import UserContext from "../contexts/UserContext";
 import Header from "../shared/Header";
 import Footer from "../shared/Footer";
-import Loader from "../shared/Loader";
 
 function Hoje() {
 
 
     const navigate = useNavigate();
-    const { userInfo, todayHabitData, setTodayHabitData, percent, setPercent, habits } = useContext(UserContext)
+    const { userInfo, todayHabitData, setTodayHabitData, percent, setPercent } = useContext(UserContext)
     const [changeHabit, setChangeHabit] = useState();
     const [iconButton, setIconButton] = useState(true);
     const [fazerOLoadFunfar, setFazerOLoadFunfar] = useState(0)
 
-    console.log(habits)
     useEffect(() => {
         if (userInfo.length === 0) {
             navigate("/");
         }
     }, [userInfo])
+    
 
     const { token } = userInfo
     const config = {
@@ -35,11 +34,10 @@ function Hoje() {
     }
     const now = dayjs().locale('pt-br');
 
-    
-
     useEffect(() => {
         const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today";
         const response = axios.get(URL, config);
+
         response.then(({ data }) => {
             setTodayHabitData(data)
             setFazerOLoadFunfar(1);
@@ -47,7 +45,6 @@ function Hoje() {
                 setPercent(0)
             } else {
                 const aux = data.filter((item) => item.done === true)
-                console.log(aux.length)
                 setPercent((aux.length / data.length) * 100)
             }
         }).catch("algo aconteceu")
@@ -58,16 +55,13 @@ function Hoje() {
     }
 
     function toggleHabit(id, done) {
-        console.log("passei aq")
         if (id !== null) {
             if (done) {
-
                 const URL = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}/uncheck`
                 const requisition = axios.post(URL, {}, config);
 
                 requisition.then(() => {
                     setChangeHabit(Math.random())
-                    console.log("deu bao")
                     const aux = todayHabitData.filter((item) => item.done === true)
                     setPercent((aux.length / todayHabitData.length) * 100)
                     setIconButton(true);
@@ -80,7 +74,6 @@ function Hoje() {
 
                 requisition.then(() => {
                     setChangeHabit(Math.random())
-                    console.log("deu bao")
                     const aux = todayHabitData.filter((item) => item.done === true)
                     setPercent((aux.length / todayHabitData.length) * 100)
                     setIconButton(true);
@@ -89,31 +82,37 @@ function Hoje() {
             }
         }
     }
-    console.log(iconButton)
 
     function createTodayHabit() {
         return (
             <>
                 {todayHabitData.map((item, key) =>
-                    <HabitBox backgroundcolor={item.done} record={item.highestSequence >=item.currentSequence} recordplus={item.highestSequence}>
+                    <HabitBox backgroundcolor={item.done} record={item.highestSequence >= item.currentSequence} recordplus={item.highestSequence} key={key}>
                         <div className="habit-text">
                             <h2>{item.name}</h2>
                             <div className="subtitle">
                                 <h3>
                                     Sequência atual: <span className="first">
                                         {item.currentSequence > 1 ?
-                                         `${item.currentSequence} dias`
-                                        :
-                                        item.currentSequence === 1 ?
-                                        `${item.currentSequence} dia` :
-                                        `0`
-                                        
+                                            `${item.currentSequence} dias`
+                                            :
+                                            item.currentSequence === 1 ?
+                                                `${item.currentSequence} dia` :
+                                                `0`
+
                                         }
-                                         </span>
+                                    </span>
                                 </h3>
                                 <h3>Seu recorde: <span className="second">
-                                    {item.highestSequence}
-                                    </span></h3>
+                                    {item.highestSequence > 1 ?
+                                    `${item.highestSequence} dias`
+                                    :
+                                    item.highestSequence === 1 ?
+                                        `${item.highestSequence} dia` :
+                                        `0`    
+                                }
+                                </span>
+                                </h3>
                             </div>
                         </div>
                         <div className="habit-check" >

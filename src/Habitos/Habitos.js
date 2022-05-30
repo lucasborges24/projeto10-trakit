@@ -1,11 +1,11 @@
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom';
 import { useContext, useEffect, useState } from 'react';
+import axios from 'axios';
 
 import UserContext from '../contexts/UserContext';
 import Header from "../shared/Header"
 import Footer from "../shared/Footer"
-import axios from 'axios';
 import HabitsList from './HabitsList';
 import Dialog from './Dialog';
 import Loader from '../shared/Loader';
@@ -15,13 +15,13 @@ function Habitos() {
     const navigate = useNavigate();
     const { userInfo, habits, setHabits, percent } = useContext(UserContext)
     const { token } = userInfo;
+
     const [enableButton, setEnableButton] = useState(true)
     const [buttonSend, setButtonSend] = useState(true);
     const [habitData, setHabitData] = useState({
         name: '',
         days: []
     });
-    const [daySelected, setDaySelected] = useState(false);
     const [dialogg, setDialogg] = useState({
         message: '',
         isLoading: false,
@@ -55,11 +55,6 @@ function Habitos() {
         })
     }, [change])
 
-
-
-
-
-
     const [days, setDays] = useState([{
         day: 'D',
         selected: false
@@ -89,35 +84,30 @@ function Habitos() {
         selected: false
     },
     ])
-    
 
     function sendHabit() {
         if (buttonSend) {
             setDeleting(true);
             if (habitData.name.length === 0) {
+                setDeleting(false);
                 return alert("Por favor, coloque o nome do hábito.")
-
             }
             if (habitData.days.length === 0) {
+                setDeleting(false);
                 return alert("Por favor, selecione ao menos um dia para praticar o hábito.")
             }
 
             const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits"
             const requisition = axios.post(URL, habitData, config);
 
-            requisition.then((data) => {
-                console.log("passando pra avisar que o gabriel é um ótimo tutor")
+            requisition.then(() => {
                 navigate("/hoje")
             }).catch(() => alert("houve um erro. tente novamente."))
         }
         setButtonSend(false);
     }
 
-
-
-
     function toggleDay(selected, id) {
-        console.log(buttonSend)
         if (!buttonSend) {
             return;
         }
@@ -127,13 +117,11 @@ function Habitos() {
                 if (selected) {
                     a[id] = { day: days[id].day, selected: false }
                     const aux2 = { ...habitData, days: [...habitData.days].filter(item => item !== id) }
-                    console.log(aux2)
                     setHabitData(aux2)
                     return setDays(a)
                 } else if (!selected) {
                     a[id] = { day: days[id].day, selected: true }
                     const aux = { ...habitData, days: [...habitData.days, id].sort((l, m) => l - m) }
-                    console.log(aux)
                     setHabitData(aux)
                     return setDays(a)
                 }
@@ -151,7 +139,8 @@ function Habitos() {
                     {days.map((i, key) =>
                         <Day
                             selected={i.selected}
-                            onClick={() => toggleDay(i.selected, key)}><p>{i.day}</p>
+                            onClick={() => toggleDay(i.selected, key)}>
+                            <p>{i.day}</p>
                         </Day>)}
                 </Days>
                 <SaveHabit onClick={() => {
@@ -199,7 +188,7 @@ function Habitos() {
     return (
         <>
             <Header />
-            {deleting ? <Loader text="Um segundo..."/> :
+            {deleting ? <Loader text="Um segundo..." /> :
                 <MainHabitos>
                     <HabitTitle>
                         <h1>Meus hábitos</h1>
@@ -218,10 +207,7 @@ function Habitos() {
                 </MainHabitos>
             }
             {dialogg.isLoading && <Dialog message={dialogg.message} onDialog={areYouSureDelete} />}
-            <Footer percent={percent}/>
-
-
-
+            <Footer percent={percent} />
         </>
     )
 }

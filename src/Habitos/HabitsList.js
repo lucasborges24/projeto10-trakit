@@ -1,16 +1,12 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import styled from 'styled-components'
-import { confirmAlert } from 'react-confirm-alert';
 
 import UserContext from '../contexts/UserContext';
 import Loader from '../shared/Loader';
-import trash from '../assets/images/trash.svg'
-import Dialog from './Dialog';
 
 function HabitsList(props) {
 
-    const { dayss, dialog, setDialog } = props
-    const [dayHabits, setDaysHabits] = useState(dayss)
+    const { dayss, setDialog } = props
     const { habits } = useContext(UserContext)
 
     if (habits.length === null) return <Loader text="Um segundo..."/>
@@ -22,14 +18,12 @@ function HabitsList(props) {
             id: id
         })
     }
-    
-    console.log(habits)
 
     return (
         <>
             {
                 habits.map((i, key) =>
-                    <HabitList>
+                    <HabitList key={key}>
                         <h2>{i.name}</h2>
                         <ion-icon onClick={() => DeletHabit(i.id)} name="trash-outline"></ion-icon>
                         <HabitDays>
@@ -40,7 +34,6 @@ function HabitsList(props) {
                                     </HabitDay>
                                 )
                             }
-
                         </HabitDays>
                     </HabitList>
                 )
@@ -66,8 +59,6 @@ function background(keyy, habits) {
 }
 
 const HabitList = styled.div` 
-    /* width: 20em; */
-    /* min-height: 91px; */
     height: 100%;
     background: #FFFFFF;
     border-radius: 5px;

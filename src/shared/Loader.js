@@ -1,24 +1,22 @@
 import styled from 'styled-components'
 
-function Loader({text}) {
+function Loader({ text }) {
     return (
         <>
-        
-          <Spinner>
-            <h1>{text}</h1>
-            <div className="loader">
-                <div className="loader-square"></div>
-                <div className="loader-square"></div>
-                <div className="loader-square"></div>
-                <div className="loader-square"></div>
-                <div className="loader-square"></div>
-                <div className="loader-square"></div>
-                <div className="loader-square"></div>
-            </div>
-        </Spinner>
-        
+            <Spinner>
+                <h1>{text}</h1>
+                <div className="loader">
+                    <div className="loader-square"></div>
+                    <div className="loader-square"></div>
+                    <div className="loader-square"></div>
+                    <div className="loader-square"></div>
+                    <div className="loader-square"></div>
+                    <div className="loader-square"></div>
+                    <div className="loader-square"></div>
+                </div>
+            </Spinner>
         </>
-      
+
     )
 }
 
@@ -48,11 +46,6 @@ h1 {
          transform: rotate(45deg);
  }
  
- 
-
- 
-
-
 @keyframes square-animation {
  0% {
   left: 0;
