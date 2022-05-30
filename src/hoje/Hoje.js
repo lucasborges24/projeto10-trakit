@@ -49,11 +49,6 @@ function Hoje() {
         }
     }, [changeHabit])
 
-
-    if (todayHabitData.length === 0) {
-        setPercent(0)
-    }
-
     function toggleHabit(id, done) {
         if (id !== null) {
             if (done) {
