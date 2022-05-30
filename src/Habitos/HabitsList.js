@@ -26,7 +26,7 @@ function HabitsList(props) {
                     <HabitList key={key}>
                         <h2>{i.name}</h2>
                         <ion-icon onClick={() => DeletHabit(i.id)} name="trash-outline"></ion-icon>
-                        <HabitDays>
+                        <HabitDays key={key}>
                             {
                                 dayss.map((j, keyy) =>
                                     <HabitDay keyy={keyy} habits={i} >

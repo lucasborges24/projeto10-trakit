@@ -16,7 +16,7 @@ function Login() {
     const [estaSalvo, setEstaSalvo] = useState(false)
     const [loginData, setLoginData] = useState({ email: '', senha: '' });
     const [enabledButton, setEnabledButton] = useState(true)
-
+    
     if ((JSON.parse(localStorage.getItem("dados")) !== null)) {
         if (estaSalvo === false) {
             setEstaSalvo(true);

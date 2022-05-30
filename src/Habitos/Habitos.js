@@ -44,15 +44,17 @@ function Habitos() {
     }
 
     useEffect(() => {
-        setDeleting(true)
-        const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits"
-        const response = axios.get(URL, config)
-
-        response.then(({ data }) => {
-            setDeleting(false)
-            const dados = data;
-            setHabits(dados);
-        })
+        if (token !== undefined) {
+            setDeleting(true)
+            const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits"
+            const response = axios.get(URL, config)
+    
+            response.then(({ data }) => {
+                setDeleting(false)
+                const dados = data;
+                setHabits(dados);
+            })
+        }
     }, [change])
 
     const [days, setDays] = useState([{
@@ -138,6 +140,7 @@ function Habitos() {
                 <Days>
                     {days.map((i, key) =>
                         <Day
+                            key={key}
                             selected={i.selected}
                             onClick={() => toggleDay(i.selected, key)}>
                             <p>{i.day}</p>

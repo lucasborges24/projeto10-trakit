@@ -17,41 +17,36 @@ function Hoje() {
     const { userInfo, todayHabitData, setTodayHabitData, percent, setPercent } = useContext(UserContext)
     const [changeHabit, setChangeHabit] = useState();
     const [iconButton, setIconButton] = useState(true);
-    const [fazerOLoadFunfar, setFazerOLoadFunfar] = useState(0)
-
-    // useEffect(() => {
-    //     if (userInfo.length === 0) {
-    //         navigate("/");
-    //     }
-    // }, [userInfo])
+    const [fazerOLoadFunfar, setFazerOLoadFunfar] = useState(0)  
     
-
     const { token } = userInfo
     const config = {
         headers: {
             "Authorization": `Bearer ${token}`
         }
-    }
+    }    
+    
     const now = dayjs().locale('pt-br');
 
     useEffect(() => {
         if (userInfo.length === 0) {
             navigate("/");
         }
-        const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today";
-        const response = axios.get(URL, config);
-
-        response.then(({ data }) => {
-            setTodayHabitData(data)
-            setFazerOLoadFunfar(1);
-            if (data.length === 0) {
-                console.log("percent is " + percent)
-                setPercent(0)
-            } else {
-                const aux = data.filter((item) => item.done === true)
-                setPercent((aux.length / data.length) * 100)
-            }
-        }).catch("algo aconteceu")
+        if (token !== undefined) {
+            const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today";
+            const response = axios.get(URL, config);
+    
+            response.then(({ data }) => {
+                setTodayHabitData(data)
+                setFazerOLoadFunfar(1);
+                if (data.length === 0) {
+                    setPercent(0)
+                } else {
+                    const aux = data.filter((item) => item.done === true)
+                    setPercent((aux.length / data.length) * 100)
+                }
+            }).catch("algo aconteceu")
+        }
     }, [changeHabit])
 
 
