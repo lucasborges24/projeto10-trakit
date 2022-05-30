@@ -29,7 +29,7 @@ function HabitsList(props) {
                         <HabitDays key={key}>
                             {
                                 dayss.map((j, keyy) =>
-                                    <HabitDay keyy={keyy} habits={i} >
+                                    <HabitDay key={keyy} keyy={keyy} habits={i} >
                                         <p>{j.day}</p>
                                     </HabitDay>
                                 )
@@ -44,16 +44,16 @@ function HabitsList(props) {
     )
 }
 
-function color(keyy, habits) {
+function color(key, habits) {
     for (let i = 0; i < habits.days.length; i++) {
-        if (habits.days[i] === keyy) return "#fff"
+        if (habits.days[i] === key) return "#fff"
     }
     return "#DBDBDB"
 }
 
-function background(keyy, habits) {
+function background(key, habits) {
     for (let i = 0; i < habits.days.length; i++) {
-        if (habits.days[i] === keyy) return "#DBDBDB"
+        if (habits.days[i] === key) return "#DBDBDB"
     }
     return "#fff"
 }
