@@ -19,11 +19,11 @@ function Hoje() {
     const [iconButton, setIconButton] = useState(true);
     const [fazerOLoadFunfar, setFazerOLoadFunfar] = useState(0)
 
-    useEffect(() => {
-        if (userInfo.length === 0) {
-            navigate("/");
-        }
-    }, [userInfo])
+    // useEffect(() => {
+    //     if (userInfo.length === 0) {
+    //         navigate("/");
+    //     }
+    // }, [userInfo])
     
 
     const { token } = userInfo
@@ -35,13 +35,17 @@ function Hoje() {
     const now = dayjs().locale('pt-br');
 
     useEffect(() => {
+        if (userInfo.length === 0) {
+            navigate("/");
+        }
         const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today";
         const response = axios.get(URL, config);
 
         response.then(({ data }) => {
             setTodayHabitData(data)
             setFazerOLoadFunfar(1);
-            if (todayHabitData.length === 0) {
+            if (data.length === 0) {
+                console.log("percent is " + percent)
                 setPercent(0)
             } else {
                 const aux = data.filter((item) => item.done === true)
@@ -49,6 +53,7 @@ function Hoje() {
             }
         }).catch("algo aconteceu")
     }, [changeHabit])
+
 
     if (todayHabitData.length === 0) {
         setPercent(0)
