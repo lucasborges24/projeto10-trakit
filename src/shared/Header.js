@@ -7,7 +7,7 @@ import UserContext from '../contexts/UserContext'
 
 function Header() {
 
-    const { userInfo } = useContext(UserContext);
+    const { userInfo, setSidebaropen } = useContext(UserContext);
     const { image } = userInfo;
 
 
@@ -16,7 +16,10 @@ function Header() {
             <Link to="/hoje">
                 <ImgLogo src={trackit} alt="logo image" />
             </Link>
-            <ImgUser src={image} alt="user image" />
+            <div className="divlegal">
+                <ImgUser src={image} alt="user image" />
+                <ion-icon onClick={() => setSidebaropen(true)} name="reorder-three-outline"></ion-icon>
+            </div>
         </Head>
     )
 }
@@ -34,6 +37,17 @@ const Head = styled.header`
     align-items: center;
     justify-content: space-between;
     padding: 0 15px;
+
+    .div-legal {
+        display: flex;
+        align-items: center;
+        justify-content: space-between
+    }
+    ion-icon {
+        font-size: 45px;
+        color: white;
+        cursor: pointer;
+    }
 `
 
 const ImgLogo = styled.img`

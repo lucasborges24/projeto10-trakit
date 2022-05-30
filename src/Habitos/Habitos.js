@@ -9,11 +9,13 @@ import Footer from "../shared/Footer"
 import HabitsList from './HabitsList';
 import Dialog from './Dialog';
 import Loader from '../shared/Loader';
+import Sidebar from "../shared/sidebar";
+
 
 function Habitos() {
 
     const navigate = useNavigate();
-    const { userInfo, habits, setHabits, percent } = useContext(UserContext)
+    const { userInfo, habits, setHabits, percent, sidebaropen } = useContext(UserContext)
     const { token } = userInfo;
 
     const [enableButton, setEnableButton] = useState(true)
@@ -210,6 +212,7 @@ function Habitos() {
                 </MainHabitos>
             }
             {dialogg.isLoading && <Dialog message={dialogg.message} onDialog={areYouSureDelete} />}
+            {sidebaropen && <Sidebar/>}
             <Footer percent={percent} />
         </>
     )

@@ -9,23 +9,24 @@ import { BallTriangle, Grid } from 'react-loader-spinner'
 import UserContext from "../contexts/UserContext";
 import Header from "../shared/Header";
 import Footer from "../shared/Footer";
+import Sidebar from "../shared/sidebar";
 
 function Hoje() {
 
 
     const navigate = useNavigate();
-    const { userInfo, todayHabitData, setTodayHabitData, percent, setPercent } = useContext(UserContext)
+    const { userInfo, todayHabitData, setTodayHabitData, percent, setPercent, sidebaropen } = useContext(UserContext)
     const [changeHabit, setChangeHabit] = useState();
     const [iconButton, setIconButton] = useState(true);
-    const [fazerOLoadFunfar, setFazerOLoadFunfar] = useState(0)  
-    
+    const [fazerOLoadFunfar, setFazerOLoadFunfar] = useState(0)
+
     const { token } = userInfo
     const config = {
         headers: {
             "Authorization": `Bearer ${token}`
         }
-    }    
-    
+    }
+
     const now = dayjs().locale('pt-br');
 
     useEffect(() => {
@@ -35,7 +36,7 @@ function Hoje() {
         if (token !== undefined) {
             const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today";
             const response = axios.get(URL, config);
-    
+
             response.then(({ data }) => {
                 setTodayHabitData(data)
                 setFazerOLoadFunfar(1);
@@ -100,12 +101,12 @@ function Hoje() {
                                 </h3>
                                 <h3>Seu recorde: <span className="second">
                                     {item.highestSequence > 1 ?
-                                    `${item.highestSequence} dias`
-                                    :
-                                    item.highestSequence === 1 ?
-                                        `${item.highestSequence} dia` :
-                                        `0`    
-                                }
+                                        `${item.highestSequence} dias`
+                                        :
+                                        item.highestSequence === 1 ?
+                                            `${item.highestSequence} dia` :
+                                            `0`
+                                    }
                                 </span>
                                 </h3>
                             </div>
@@ -152,17 +153,18 @@ function Hoje() {
 
     return (
         <>
-            <Header />
-            <MainHoje>
-                <h1>{now.format("dddd, DD/MM").replace(/^\w/, (c) => c.toUpperCase())}</h1>
-                <Subtitle textcolor={percent}>
-                    {percent === 0 ? <>Nenhum hábito concluído ainda</> : <>{Math.round(percent)}% dos hábitos concluídos</>}
-                </Subtitle>
-                <TodayHabits>
-                    {loading}
-                </TodayHabits>
-            </MainHoje>
-            <Footer percent={percent} />
+                    <Header />
+                    <MainHoje>
+                        <h1>{now.format("dddd, DD/MM").replace(/^\w/, (c) => c.toUpperCase())}</h1>
+                        <Subtitle textcolor={percent}>
+                            {percent === 0 ? <>Nenhum hábito concluído ainda</> : <>{Math.round(percent)}% dos hábitos concluídos</>}
+                        </Subtitle>
+                        <TodayHabits>
+                            {loading}
+                        </TodayHabits>
+                    </MainHoje>
+                    <Footer percent={percent} />
+                    {sidebaropen && <Sidebar />}
         </>
     )
 }

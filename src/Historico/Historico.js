@@ -12,11 +12,13 @@ import 'react-calendar/dist/Calendar.css';
 import Header from "../shared/Header"
 import Footer from "../shared/Footer"
 import Loader from '../shared/Loader';
+import Sidebar from "../shared/sidebar";
+
 
 function Historico() {
 
     const navigate = useNavigate();
-    const { userInfo, percent } = useContext(UserContext)
+    const { userInfo, percent, sidebaropen } = useContext(UserContext)
 
     const [value, setValue] = useState(new Date().toString().split(" ")[2]);
     const { token } = userInfo
@@ -126,6 +128,7 @@ function Historico() {
             <Header />
             {showCalendar}
             <Footer percent={percent} />
+            {sidebaropen && <Sidebar />}
         </>
     )
 }

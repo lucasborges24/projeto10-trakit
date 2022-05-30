@@ -16,9 +16,11 @@ function App() {
   const [habits, setHabits] = useState([]);
   const [todayHabitData, setTodayHabitData] = useState([]);
   const [percent, setPercent] = useState(0)
+  const [sidebaropen, setSidebaropen] = useState(false);
+  
 
   return (
-    <UserContext.Provider value={{userInfo, setUserInfo, habits, setHabits, todayHabitData, setTodayHabitData, percent, setPercent }}>
+    <UserContext.Provider value={{userInfo, setUserInfo, sidebaropen, setSidebaropen, habits, setHabits, todayHabitData, setTodayHabitData, percent, setPercent }}>
       <BrowserRouter>
         <GlobalStyle />
         <Routes>

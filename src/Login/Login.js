@@ -10,19 +10,23 @@ import Loader from "../shared/Loader";
 
 function Login() {
 
-    const { setUserInfo } = useContext(UserContext);
+    const { setUserInfo, setSidebaropen } = useContext(UserContext);
     const navigate = useNavigate();
 
     const [estaSalvo, setEstaSalvo] = useState(false)
     const [loginData, setLoginData] = useState({ email: '', senha: '' });
     const [enabledButton, setEnabledButton] = useState(true)
+
     
     if ((JSON.parse(localStorage.getItem("dados")) !== null)) {
         if (estaSalvo === false) {
             setEstaSalvo(true);
         }
+        
         atualizaHojeScreen();
     }
+
+    
 
     function atualizaHojeScreen() {
         const dadosSalvos = JSON.parse(localStorage.getItem("dados"))
@@ -33,6 +37,7 @@ function Login() {
 
         response
             .then(({ data }) => {
+                setSidebaropen(false)
                 setUserInfo(data)
                 navigate("/hoje")
             })
@@ -78,6 +83,7 @@ function Login() {
 
     function signup(event) {
         event.preventDefault();
+        setSidebaropen(false)
         if (!enabledButton) {
 
         } else {
